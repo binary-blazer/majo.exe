@@ -154,20 +154,20 @@ export function EnablePublicDashboard({ enabled, serverId, vanityURL }) {
          "!border-red-400 focus:!border-red-400": vanityError,
          "peer-focus:!border-button-primary border-neutral-800": !vanityError,
         },
-        "hidden select-none rounded-md rounded-r-none border border-r-0 border-r-transparent bg-transparent py-2 pl-3 font-normal text-white/60 shadow-sm outline-none !ring-0 duration-200 sm:block "
+        "hidden select-none rounded-md rounded-r-none border border-r-0 border-r-transparent bg-transparent py-2 pl-3 font-normal text-white/60 shadow-sm outline-none !ring-0 duration-200 sm:block"
        )}
       >
        {process.env.NEXT_PUBLIC_URL}/server/
       </div>
      </div>
      <PrimaryButton onClick={(e) => updateVanity(e)} disabled={disabled || vanityError} className="mx-auto font-normal md:mx-0">
-      {buttonText === "Updating..." ? <ArrowPathIcon className="min-h-5 min-w-5 mr-2 h-5 w-5 animate-spin" /> : <CheckIcon className="min-h-5 min-w-5 mr-2 h-5 w-5" />} {buttonText}
+      {buttonText === "Updating..." ? <ArrowPathIcon className="mr-2 h-5 min-h-5 w-5 min-w-5 animate-spin" /> : <CheckIcon className="mr-2 h-5 min-h-5 w-5 min-w-5" />} {buttonText}
      </PrimaryButton>
     </div>
    </div>
    {vanityError && (
     <p className="flex items-center text-red-400">
-     <ExclamationCircleIcon className="min-h-5 min-w-5 mr-2 h-5 w-5" />
+     <ExclamationCircleIcon className="mr-2 h-5 min-h-5 w-5 min-w-5" />
      {vanityError}
     </p>
    )}

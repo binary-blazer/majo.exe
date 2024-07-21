@@ -33,7 +33,7 @@ export function ClientDisclosure({ buttonElements, buttonIcon, children, ...prop
         {
          "stroke-accent-primary rotate-180": open,
         },
-        "min-h-4 min-w-4 ml-auto h-4 w-4 duration-200 motion-reduce:transition-none"
+        "ml-auto h-4 min-h-4 w-4 min-w-4 duration-200 motion-reduce:transition-none"
        )}
       />
      </Disclosure.Button>

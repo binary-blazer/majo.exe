@@ -21,7 +21,7 @@ export function Warns({ data, showControls = true, showSearch = true }) {
     accessor: "user",
     Cell: ({ value }) => (
      <div className="flex items-center space-x-4">
-      <div className="relative">{value?.avatar && <Image src={`https://cdn.discordapp.com/avatars/${value?.discordId}/${value?.avatar}.${value?.avatar.startsWith("a_") ? "gif" : "png"}`} alt={`${value?.name} avatar`} quality={95} width={32} height={32} className="min-h-12 min-w-12 h-12 w-12 rounded-full" />}</div>
+      <div className="relative">{value?.avatar && <Image src={`https://cdn.discordapp.com/avatars/${value?.discordId}/${value?.avatar}.${value?.avatar.startsWith("a_") ? "gif" : "png"}`} alt={`${value?.name} avatar`} quality={95} width={32} height={32} className="h-12 min-h-12 w-12 min-w-12 rounded-full" />}</div>
       <Tooltip content={`Discord ID: ${value?.discordId || "Unknown"}`}>
        <span className="text-left font-bold">
         {value?.global_name || value?.name}
@@ -51,7 +51,7 @@ export function Warns({ data, showControls = true, showSearch = true }) {
     accessor: "link",
     Cell: ({ value }) => (
      <SecondaryButton className="w-fit" href={`user/${value}#warns`}>
-      <LinkIcon className="min-h-5 min-w-5 -ml-1 mr-2 h-5 w-5" />
+      <LinkIcon className="-ml-1 mr-2 h-5 min-h-5 w-5 min-w-5" />
       View
      </SecondaryButton>
     ),
@@ -101,7 +101,7 @@ export function Warns({ data, showControls = true, showSearch = true }) {
   <>
    <div className="flex w-full flex-col">
     <div className="flex flex-row items-center gap-4">
-     {showSearch && <InputWithIcon icon={<MagnifyingGlassIcon className="min-h-5 min-w-5 h-5 w-5" />} placeholder="Search" value={globalFilter || ""} onChange={(e) => setGlobalFilter(e.target.value)} className="h-10" />}
+     {showSearch && <InputWithIcon icon={<MagnifyingGlassIcon className="h-5 min-h-5 w-5 min-w-5" />} placeholder="Search" value={globalFilter || ""} onChange={(e) => setGlobalFilter(e.target.value)} className="h-10" />}
      {showControls && (
       <select
        value={pageSize}
@@ -209,7 +209,7 @@ export function ManageWarns({ data, guildId, showControls = true, showSearch = t
      <>
       {value && value.discordId ? (
        <div className="flex items-center space-x-4">
-        <div className="relative">{value?.avatar && <Image src={`https://cdn.discordapp.com/avatars/${value?.discordId}/${value?.avatar}.${value?.avatar.startsWith("a_") ? "gif" : "png"}`} alt={`${value?.name} avatar`} quality={95} width={32} height={32} className="min-h-12 min-w-12 h-12 w-12 rounded-full" />}</div>
+        <div className="relative">{value?.avatar && <Image src={`https://cdn.discordapp.com/avatars/${value?.discordId}/${value?.avatar}.${value?.avatar.startsWith("a_") ? "gif" : "png"}`} alt={`${value?.name} avatar`} quality={95} width={32} height={32} className="h-12 min-h-12 w-12 min-w-12 rounded-full" />}</div>
         <Tooltip content={`Discord ID: ${value?.discordId || "Unknown"}`}>
          <span className="text-left font-bold">
           {value?.global_name || value?.name}
@@ -219,7 +219,7 @@ export function ManageWarns({ data, guildId, showControls = true, showSearch = t
        </div>
       ) : (
        <div className="flex flex-row items-center space-x-4">
-        <AvatarSkeleton className="!min-h-12 !min-w-12 !h-12 !w-12 rounded-full" />
+        <AvatarSkeleton className="!h-12 !min-h-12 !w-12 !min-w-12 rounded-full" />
         <TextSkeleton className="w-20" />
        </div>
       )}
@@ -248,19 +248,19 @@ export function ManageWarns({ data, guildId, showControls = true, showSearch = t
      <RedButton className="w-fit" onClick={() => removeWarn(value)} disabled={loadingWarns?.includes(value) || deletedWarns?.includes(value)}>
       {deletedWarns?.includes(value) ? (
        <>
-        <CheckIcon className="min-h-5 min-w-5 -ml-1 mr-2 h-5 w-5" />
+        <CheckIcon className="-ml-1 mr-2 h-5 min-h-5 w-5 min-w-5" />
         Deleted!
        </>
       ) : (
        <>
         {loadingWarns?.includes(value) ? (
          <>
-          <ArrowPathIcon className="min-h-5 min-w-5 -ml-1 mr-2 h-5 w-5 animate-spin" />
+          <ArrowPathIcon className="-ml-1 mr-2 h-5 min-h-5 w-5 min-w-5 animate-spin" />
           Deleting...
          </>
         ) : (
          <>
-          <TrashIcon className="min-h-5 min-w-5 -ml-1 mr-2 h-5 w-5" />
+          <TrashIcon className="-ml-1 mr-2 h-5 min-h-5 w-5 min-w-5" />
           Delete
          </>
         )}
@@ -315,7 +315,7 @@ export function ManageWarns({ data, guildId, showControls = true, showSearch = t
   <>
    <div className="flex w-full flex-col">
     <div className="flex flex-row items-center gap-4">
-     {showSearch && <InputWithIcon icon={<MagnifyingGlassIcon className="min-h-5 min-w-5 h-5 w-5" />} placeholder="Search" value={globalFilter || ""} onChange={(e) => setGlobalFilter(e.target.value)} className="h-10" />}
+     {showSearch && <InputWithIcon icon={<MagnifyingGlassIcon className="h-5 min-h-5 w-5 min-w-5" />} placeholder="Search" value={globalFilter || ""} onChange={(e) => setGlobalFilter(e.target.value)} className="h-10" />}
      {showControls && (
       <select
        value={pageSize}

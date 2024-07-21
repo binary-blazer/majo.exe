@@ -105,12 +105,12 @@ export function ChangeEmbedColor({ serverId, serverColor }) {
    <HexColorPicker color={color} onChange={setColor} />
    <div>
     <div className="mt-4 flex items-center gap-1 sm:ml-4">
-     <Image src={dashboardConfig.logo} alt={serverId} quality={95} width={64} height={64} className="min-h-10 min-w-10 h-10 w-10 self-baseline rounded-full" />
+     <Image src={dashboardConfig.logo} alt={serverId} quality={95} width={64} height={64} className="h-10 min-h-10 w-10 min-w-10 self-baseline rounded-full" />
      <div className="flex flex-col">
       <div className="ml-1 flex h-10 flex-row items-center">
        <span className="font-bold">{dashboardConfig.title}</span>{" "}
        <span className="ml-1 flex items-center gap-1 rounded bg-[#5c65f3] px-1 py-[0.12rem] text-xs text-white">
-        <CheckIcon className="min-h-4 min-w-4 h-4 w-4 stroke-2" aria-hidden="true" role="img" /> <span className="-mb-px">BOT</span>
+        <CheckIcon className="h-4 min-h-4 w-4 min-w-4 stroke-2" aria-hidden="true" role="img" /> <span className="-mb-px">BOT</span>
        </span>
        <span className="ml-2 text-sm text-gray-400">Today at 4:20 PM</span>
       </div>
@@ -128,11 +128,11 @@ export function ChangeEmbedColor({ serverId, serverColor }) {
        </div>
        <div className="my-2 ml-1 flex flex-row gap-2">
         <PrimaryButton onClick={handleSubmit}>
-         {buttonText === "Saving..." ? <ArrowPathIcon className="min-h-5 min-w-5 -ml-1 mr-1 h-5 w-5 animate-spin" /> : <CheckIcon className="min-h-5 min-w-5 -ml-1 mr-1 h-5 w-5" />}
+         {buttonText === "Saving..." ? <ArrowPathIcon className="-ml-1 mr-1 h-5 min-h-5 w-5 min-w-5 animate-spin" /> : <CheckIcon className="-ml-1 mr-1 h-5 min-h-5 w-5 min-w-5" />}
          {buttonText}
         </PrimaryButton>
         <SecondaryButton onClick={handleReset}>
-         {resetButtonText === "Resetting..." ? <ArrowPathIcon className="min-h-5 min-w-5 -ml-1 mr-1 h-5 w-5 animate-spin" /> : <TrashIcon className="min-h-5 min-w-5 -ml-1 mr-1 h-5 w-5" />}
+         {resetButtonText === "Resetting..." ? <ArrowPathIcon className="-ml-1 mr-1 h-5 min-h-5 w-5 min-w-5 animate-spin" /> : <TrashIcon className="-ml-1 mr-1 h-5 min-h-5 w-5 min-w-5" />}
          {resetButtonText}
         </SecondaryButton>
        </div>

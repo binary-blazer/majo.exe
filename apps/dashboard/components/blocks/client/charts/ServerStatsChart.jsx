@@ -45,14 +45,14 @@ function GenerateComponent({ title, data, CSVData, valueName, fileName, categori
           "bg-background-menu-button flex h-10 select-none items-center rounded border border-neutral-700 px-4 py-2 duration-200 motion-reduce:transition-none"
          )}
         >
-         <ArrowDownTrayIcon className="min-h-4 min-w-4 h-4 w-4" aria-hidden="true" role="img" />
+         <ArrowDownTrayIcon className="h-4 min-h-4 w-4 min-w-4" aria-hidden="true" role="img" />
          <span className="!ml-2 text-base font-normal">Export</span>
          <ChevronDownIcon
           className={clsx(
            {
             "rotate-180": open,
            },
-           "min-h-4 min-w-4 ml-2 h-4 w-4 duration-200 motion-reduce:transition-none"
+           "ml-2 h-4 min-h-4 w-4 min-w-4 duration-200 motion-reduce:transition-none"
           )}
          />
         </div>
@@ -61,7 +61,7 @@ function GenerateComponent({ title, data, CSVData, valueName, fileName, categori
      </div>
      <Transition as={Fragment} enter="transition ease-out duration-100" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
       <Menu.Items className="bg-background-menu absolute right-0 z-50 mt-2 w-56 origin-top-right divide-y divide-neutral-800 rounded-md border border-neutral-800 p-1 shadow-2xl">
-       <div className="px-1 py-1 ">
+       <div className="px-1 py-1">
         <Menu.Item>
          {({ active }) => (
           <p
@@ -74,7 +74,7 @@ function GenerateComponent({ title, data, CSVData, valueName, fileName, categori
             "group my-1 flex w-full cursor-pointer items-center rounded-md px-2 py-2 text-sm font-normal duration-200 motion-reduce:transition-none"
            )}
           >
-           <DocumentArrowDownIcon className="min-h-5 min-w-5 mr-2 h-5 w-5 " aria-hidden="true" role="img" /> Export as CSV
+           <DocumentArrowDownIcon className="mr-2 h-5 min-h-5 w-5 min-w-5" aria-hidden="true" role="img" /> Export as CSV
           </p>
          )}
         </Menu.Item>
@@ -90,7 +90,7 @@ function GenerateComponent({ title, data, CSVData, valueName, fileName, categori
             "group my-1 flex w-full cursor-pointer items-center rounded-md px-2 py-2 text-sm font-normal duration-200 motion-reduce:transition-none"
            )}
           >
-           <DocumentArrowDownIcon className="min-h-5 min-w-5 mr-2 h-5 w-5 " aria-hidden="true" role="img" /> Export as JSON
+           <DocumentArrowDownIcon className="mr-2 h-5 min-h-5 w-5 min-w-5" aria-hidden="true" role="img" /> Export as JSON
           </p>
          )}
         </Menu.Item>

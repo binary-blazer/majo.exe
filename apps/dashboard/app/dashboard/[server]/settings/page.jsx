@@ -93,7 +93,7 @@ export default async function SettingsPage({ params }) {
     <div className="mb-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
      <Block className="flex flex-col items-start justify-start gap-2">
       <Header3>
-       <Icons.check className={iconVariants({ variant: "large", className: "text-left rounded-md border border-green-400 stroke-green-400 p-1" })} />
+       <Icons.check className={iconVariants({ variant: "large", className: "rounded-md border border-green-400 stroke-green-400 p-1 text-left" })} />
        Things that are shown:
       </Header3>
       <ul className="list-inside list-disc">
@@ -105,7 +105,7 @@ export default async function SettingsPage({ params }) {
      </Block>
      <Block className="flex flex-col items-start justify-start gap-2">
       <Header3>
-       <Icons.close className={iconVariants({ variant: "large", className: "text-left rounded-md border border-red-400 stroke-red-400 p-1" })} />
+       <Icons.close className={iconVariants({ variant: "large", className: "rounded-md border border-red-400 stroke-red-400 p-1 text-left" })} />
        Things that are not shown:
       </Header3>
       <ul className="list-inside list-disc">

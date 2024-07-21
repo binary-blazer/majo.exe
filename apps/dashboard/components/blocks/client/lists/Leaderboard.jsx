@@ -24,7 +24,7 @@ export function Leaderboard({ data, showControls = true, showSearch = true }) {
      <div id={value?.discordId}>
       <Tooltip content={`Discord ID: ${value?.discordId || "Unknown"}`}>
        <Link className="flex w-fit items-center space-x-4" href={showControls ? `user/${value?.discordId}` : `#${value?.discordId}`} passHref>
-        <div className="relative">{value?.avatar && <Image src={`https://cdn.discordapp.com/avatars/${value?.discordId}/${value?.avatar}.${value?.avatar.startsWith("a_") ? "gif" : "png"}`} alt={`${value?.name} avatar`} quality={95} width={32} height={32} className="min-h-12 min-w-12 h-12 w-12 rounded-full" />}</div>
+        <div className="relative">{value?.avatar && <Image src={`https://cdn.discordapp.com/avatars/${value?.discordId}/${value?.avatar}.${value?.avatar.startsWith("a_") ? "gif" : "png"}`} alt={`${value?.name} avatar`} quality={95} width={32} height={32} className="h-12 min-h-12 w-12 min-w-12 rounded-full" />}</div>
         <span className="text-left font-bold">
          {value?.global_name || value?.name}
          {value?.discriminator !== "0" && <span className="opacity-70">#{value?.discriminator || "0000"}</span>}
@@ -87,7 +87,7 @@ export function Leaderboard({ data, showControls = true, showSearch = true }) {
   <>
    <div className="flex w-full flex-col">
     <div className="flex flex-row items-center gap-4">
-     {showSearch && <InputWithIcon icon={<MagnifyingGlassIcon className="min-h-5 min-w-5 h-5 w-5" />} placeholder="Search" value={globalFilter || ""} onChange={(e) => setGlobalFilter(e.target.value)} className="h-10" />}
+     {showSearch && <InputWithIcon icon={<MagnifyingGlassIcon className="h-5 min-h-5 w-5 min-w-5" />} placeholder="Search" value={globalFilter || ""} onChange={(e) => setGlobalFilter(e.target.value)} className="h-10" />}
      {showControls && (
       <select
        value={pageSize}
