@@ -1,4 +1,4 @@
-import { formatDuration } from "@majoexe/util/functions";
+import { formatDuration } from "@majoexe/util/functions/util";
 import { ApplicationCommandType, ApplicationCommandOptionType, EmbedBuilder, codeBlock, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, ComponentType } from "discord.js";
 
 export default {
@@ -165,11 +165,12 @@ export default {
 
     const collector = response.createMessageComponentCollector({
      componentType: ComponentType.StringSelect,
-     filter: (i) => i.user.id === interaction.user.id,
+     filter: (i) => i.user.id === interaction.member.user.id,
      time: 3 * 60 * 1000, // 30 seconds
     });
 
     collector.on("collect", async (i) => {
+     /* eslint-disable-next-line prefer-destructuring */
      const category = i.values[0];
      const commands = client.slashCommands.filter((cmd) => cmd.category.toLowerCase() === category.toLowerCase());
      const embed = new EmbedBuilder()

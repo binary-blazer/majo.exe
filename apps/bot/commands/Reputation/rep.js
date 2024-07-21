@@ -1,7 +1,7 @@
 /* eslint-disable complexity */
 import { cacheGet, cacheSet } from "@majoexe/database/redis";
 import { checkReputation, giveReputation, takeReputation, setReputation } from "@majoexe/util/database";
-import { formatDuration } from "@majoexe/util/functions";
+import { formatDuration } from "@majoexe/util/functions/util";
 import { ApplicationCommandType, ApplicationCommandOptionType, EmbedBuilder, PermissionFlagsBits } from "discord.js";
 
 export default {
@@ -119,7 +119,7 @@ export default {
     }
 
     const rep = await giveReputation(user, interaction.guild);
-    await cacheSet(key, { userId: interaction.user.id, time: Date.now() }, 86400000);
+    await cacheSet(key, { userId: interaction.member.user.id, time: Date.now() }, 86400000);
 
     const embed = new EmbedBuilder()
      .setColor(guildSettings?.embedColor || client.config.defaultColor)
@@ -156,7 +156,7 @@ export default {
 
     const rep = await takeReputation(user, interaction.guild);
 
-    await cacheSet(key, { userId: interaction.user.id, time: Date.now() }, 86400000);
+    await cacheSet(key, { userId: interaction.member.user.id, time: Date.now() }, 86400000);
 
     const embed = new EmbedBuilder()
      .setColor(guildSettings?.embedColor || client.config.defaultColor)

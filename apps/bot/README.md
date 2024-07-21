@@ -17,14 +17,18 @@
    - `TOKEN` - Discord bot token [[Tutorial](#-discord-token)]
    - `SECRET` - Random string (min. length = 32 chars)
    - `CLIENT_SECRET` - Discord bot secret [[Tutorial](#-discord-secret)]
-6. Go to `/apps/bot/` directory
-7. Run `pnpm i` to install all dependencies,
-8. Fill `/config/index.js` and `/config/emojis.js` with your values
-9. Run `pnpm run dev` or `pnpm run deploy` to start bot
+   - Database URLs [[Tutorial](/packages/database/README.md)]
+     - `DATABASE_URL` - Main database URL
+     - `DATABASE_URL_UNPOOLED` - Direct database URL (optional)
+6. Run `pnpm i` to install all dependencies
+7. Go to `/packages/config/` directory and change values in `/configs/bot.js` to your values
+8. Go back to main directory and run `pnpm run dev --filter=bot` or `pnpm run deploy --filter=bot` to start bot
+9. That's it! You can now invite your bot to your server and use it!
 
-##### Example `.env` file
+> [!NOTE]
+> If you want to host Majo.exe 24/7, you can use [TrestHost](https://dash.tresthost.me/register?ref=majonez.exe) or [Terohost](https://my.terohost.com/aff.php?aff=17) hosting services. They are cheap and reliable.
 
-Remember - the file is super secret, better to not share it!
+## 🔒 Example `.env` file
 
 ```
 TOKEN=DISCORD_BOT_TOKEN
@@ -35,7 +39,7 @@ CLIENT_SECRET=DISCORD_BOT_SECRET
 ```
 
 > [!WARNING]
-> This file should be in **root directory** of the project.
+> This file should be in **root directory** of the project. This file is **super secret**, better to not share it!
 
 ---
 
@@ -46,8 +50,8 @@ Ensure your setup meets these prerequisites before setting up Majo.exe:
 - `PostgreSQL 14x` or higher
 - `Node.js 18x` or higher
 - `(Any)` Linux x64¹
-- `512MB` of RAM (minimum)
-- `3GB` of hard drive space (minimum)
+- `~512MB` of RAM (minimum)
+- `~3GB` of hard drive space (minimum)
 
 > [!NOTE]
 > 1: Debian based distros are recommended, Dashboard can also run on Windows and MacOS but it's not recommended.
@@ -87,10 +91,9 @@ Ensure your setup meets these prerequisites before setting up Majo.exe:
 
 **These wonderful people and services have helped develop Majo.exe, without them this project would not exist. Thanks goes to these wonderful people!**
 
-|                                                                                                                                                             | Sponsor                                                             | Description                                                                                                                                                         |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| ![TrestHost Logo](https://media.discordapp.net/attachments/1016532713173426297/1137629737334870038/tresthost.png?width=112&height=112)                      | [**TrestHost**](https://dash.tresthost.me/register?ref=majonez.exe) | **TrestHost is a good and powerful hosting provider** providing servers from the **USA and Germany**. Try us out today!                                             |
-| ![Terohost Logo](https://media.discordapp.net/attachments/905722570286960650/1139902959308783677/943e2f13a56ed86da3bfd4ffcbd5094e.png?width=112&height=112) | [Terohost](https://my.terohost.com/aff.php?aff=17)                  | **TeroHost is a Discord Bot hosting** provider that helps take care of all your needs regarding your Discord Bot to ensure your bot perfect uptime, ping and speed. |
+|                                                                      | Sponsor                                                             | Description                                                                                                             |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------- |
+| ![TrestHost Logo](https://majoexe.xyz/assets/sponsors/tresthost.png) | [**TrestHost**](https://dash.tresthost.me/register?ref=majonez.exe) | **TrestHost is a good and powerful hosting provider** providing servers from the **USA and Germany**. Try us out today! |
 
 ## ⁉️ Issues
 

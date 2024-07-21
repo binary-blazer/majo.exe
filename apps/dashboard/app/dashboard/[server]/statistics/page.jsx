@@ -1,20 +1,22 @@
 /* eslint-disable complexity */
 
-import { ArrowTrendingDownIcon, ArrowTrendingUpIcon, ChatBubbleLeftRightIcon, MinusIcon, UserMinusIcon, UserPlusIcon } from "@heroicons/react/24/outline";
 import prismaClient from "@majoexe/database";
-import { getGuildMember, getServer } from "@majoexe/util/functions";
+import { getGuildMember, getServer } from "@majoexe/util/functions/guild";
+import { fillMissingDates } from "@majoexe/util/functions/util";
 import { json2csv } from "json-2-csv";
 import { getSession } from "lib/session";
 import { redirect } from "next/navigation";
-import { GraphCard } from "@/components/blocks/Card";
-import { ServerStatsChart } from "@/components/blocks/client/charts/ServerStatsChart";
+import { notFound } from "next/navigation";
+import { GraphCard } from "@/components/Card";
+import { ServerStatsChart } from "@/components/client/charts/ServerStatsChart";
+import { Icons, iconVariants } from "@/components/Icons";
 
-export default async function Statistics({ params }) {
+export default async function StatisticsPage({ params }) {
  const session = await getSession();
  if (!session || !session.access_token) redirect("/auth/login");
  const { server } = params;
  const serverDownload = await getServer(server);
- if (!serverDownload || serverDownload.code === 10004 || !serverDownload.bot) return redirect("/auth/error?error=It%20looks%20like%20the%20server%20you%20are%20trying%20to%20display%20does%20not%20exist");
+ if (!serverDownload || serverDownload.code === 10004 || !serverDownload.bot) return notFound();
  const serverMember = await getGuildMember(serverDownload.id, session.access_token);
  if (
   // prettier
@@ -23,152 +25,83 @@ export default async function Statistics({ params }) {
   !serverMember.permissions_names.includes("ManageGuild") ||
   !serverMember.permissions_names.includes("Administrator")
  )
-  return redirect("/auth/error?error=It%20looks%20like%20you%20do%20not%20have%20permission%20to%20access%20this%20page.");
+  return notFound();
 
- const guild = await prismaClient.guild.findFirst({
+ const guild = await prismaClient.guild.upsert({
   where: {
    guildId: serverDownload.id,
   },
+  update: {},
+  create: {
+   guildId: serverDownload.id,
+  },
   select: {
-   guildId: true,
-   guildJoin: {
-    where: {
-     date: {
-      gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
-     },
-    },
-    select: {
-     date: true,
-     joins: true,
-    },
-   },
-   guildLeave: {
-    where: {
-     date: {
-      gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
-     },
-    },
-    select: {
-     date: true,
-     leaves: true,
-    },
-   },
-   guildMessage: {
-    where: {
-     date: {
-      gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
-     },
-    },
-    select: {
-     date: true,
-     messages: true,
-    },
-   },
+   guildJoin: true,
+   guildLeave: true,
+   guildMessage: true,
   },
  });
 
- if (!guild) {
-  await prismaClient.guild.create({
-   data: {
-    guildId: serverDownload.id,
-   },
-  });
- }
+ const sumArray = (array, metric) => array.reduce((accumulator, currentValue) => accumulator + currentValue[metric], 0);
 
- const guildJoinMap = new Map();
- const guildLeaveMap = new Map();
- const guildMessageMap = new Map();
+ let guildJoin = guild.guildJoin.map((guildJoinData) => ({
+  date: guildJoinData.date.toISOString().split("T")[0],
+  Joins: guildJoinData.joins,
+ }));
 
- const parseDate = (dateString) => {
-  const date = new Date(dateString);
-  return isNaN(date) ? null : date.toISOString().split("T")[0];
- };
+ let guildLeave = guild.guildLeave.map((guildLeaveData) => ({
+  date: guildLeaveData.date.toISOString().split("T")[0],
+  Leaves: guildLeaveData.leaves,
+ }));
 
- guild.guildJoin.forEach((guildJoinData) => {
-  const dateFormatted = parseDate(guildJoinData.date);
-  if (dateFormatted !== null) {
-   guildJoinMap.set(dateFormatted, (guildJoinMap.get(dateFormatted) || 0) + guildJoinData.joins);
-  }
- });
+ let guildMessage = guild.guildMessage.map((guildMessageData) => ({
+  date: guildMessageData.date.toISOString().split("T")[0],
+  Messages: guildMessageData.messages,
+ }));
 
- guild.guildLeave.forEach((guildLeaveData) => {
-  const dateFormatted = parseDate(guildLeaveData.date);
-  if (dateFormatted !== null) {
-   guildLeaveMap.set(dateFormatted, (guildLeaveMap.get(dateFormatted) || 0) + guildLeaveData.leaves);
-  }
- });
-
- guild.guildMessage.forEach((guildMessageData) => {
-  const dateFormatted = parseDate(guildMessageData.date);
-  if (dateFormatted !== null) {
-   guildMessageMap.set(dateFormatted, (guildMessageMap.get(dateFormatted) || 0) + guildMessageData.messages);
-  }
- });
-
- const currentDate = new Date();
- const pastDays = 30;
- const guildJoin = [];
- const guildLeave = [];
- const guildMessage = [];
-
- for (let i = 0; i < pastDays; i++) {
-  const date = new Date(currentDate);
-  date.setDate(currentDate.getDate() - i);
-  const dateFormatted = parseDate(date.toISOString().split("T")[0]);
-
-  const joins = guildJoinMap.get(dateFormatted) || 0;
-  const leaves = guildLeaveMap.get(dateFormatted) || 0;
-  const messages = guildMessageMap.get(dateFormatted) || 0;
-
-  guildJoin.unshift({ date: dateFormatted, Joins: joins });
-  guildLeave.unshift({ date: dateFormatted, Leaves: leaves });
-  guildMessage.unshift({ date: dateFormatted, Messages: messages });
- }
+ guildJoin = fillMissingDates(guildJoin, "Joins");
+ guildLeave = fillMissingDates(guildLeave, "Leaves");
+ guildMessage = fillMissingDates(guildMessage, "Messages");
 
  const guildJoinCSV = json2csv(guildJoin);
  const guildLeaveCSV = json2csv(guildLeave);
  const guildMessageCSV = json2csv(guildMessage);
 
- function sumArray(array, metric) {
-  return array.reduce((accumulator, currentValue) => accumulator + currentValue[metric], 0);
- }
-
- const newMembers = sumArray(guildJoin, "Joins") - sumArray(guildLeave, "Leaves");
- const membersLeft = sumArray(guildLeave, "Leaves");
- const newMessages = sumArray(guildMessage, "Messages");
+ const newMembers = sumArray(guildJoin.slice(-7), "Joins") - sumArray(guildLeave.slice(-7), "Leaves");
+ const membersLeft = sumArray(guildLeave.slice(-7), "Leaves");
+ const newMessages = sumArray(guildMessage.slice(-7), "Messages");
 
  return (
   <>
    <div className="mb-4 grid grid-cols-1 gap-0 md:grid-cols-1 md:gap-4 lg:grid-cols-2 xl:grid-cols-3">
     <GraphCard
-     key="1"
+     className="mt-0"
      data={{
-      icon: <UserPlusIcon className="min-h-8 min-w-8 h-8 w-8" />,
+      icon: <Icons.userAdd className={iconVariants({ variant: "extraLarge" })} />,
       title: "New Members",
-      description: "The amount of new members that joined your server.",
+      description: "Amount of new members that joined your server in the last 7 days.",
       value: newMembers,
-      graph: newMembers === 0 ? <MinusIcon className="min-h-5 min-w-5 h-5 w-5" /> : newMembers < 0 ? <ArrowTrendingDownIcon className="min-h-5 min-w-5 h-5 w-5" /> : <ArrowTrendingUpIcon className="min-h-5 min-w-5 h-5 w-5" />,
+      graph: newMembers === 0 ? <Icons.minus className={iconVariants({ variant: "normal" })} /> : newMembers < 0 ? <Icons.trendingDown className={iconVariants({ variant: "normal" })} /> : <Icons.trendingUp className={iconVariants({ variant: "normal" })} />,
      }}
     />
     <GraphCard
-     key="2"
+     className="mt-0"
      data={{
-      icon: <UserMinusIcon className="min-h-8 min-w-8 h-8 w-8" />,
+      icon: <Icons.userMinus className={iconVariants({ variant: "extraLarge" })} />,
       title: "Members Left",
-      description: "The amount of members that left your server.",
+      description: "Amount of members that left your server in the last 7 days.",
       value: membersLeft,
-      graph: membersLeft === 0 ? <MinusIcon className="min-h-5 min-w-5 h-5 w-5" /> : membersLeft < 0 ? <ArrowTrendingDownIcon className="min-h-5 min-w-5 h-5 w-5" /> : <ArrowTrendingUpIcon className="min-h-5 min-w-5 h-5 w-5" />,
+      graph: membersLeft === 0 ? <Icons.minus className={iconVariants({ variant: "normal" })} /> : membersLeft < 0 ? <Icons.trendingDown className={iconVariants({ variant: "normal" })} /> : <Icons.trendingUp className={iconVariants({ variant: "normal" })} />,
      }}
     />
     <GraphCard
-     key="2"
-     className={"col-span-1 lg:col-span-2 lg:mt-0 xl:col-span-1 xl:mt-4"}
+     className="col-span-1 mt-0 lg:col-span-2 xl:col-span-1"
      data={{
-      icon: <ChatBubbleLeftRightIcon className="min-h-8 min-w-8 h-8 w-8" />,
+      icon: <Icons.commentAdd className={iconVariants({ variant: "extraLarge" })} />,
       title: "New Messages",
-      description: "The amount of new messages that were sent in your server.",
+      description: "The amount of messages that were sent in your server in the last 7 days.",
       value: newMessages,
-      graph: newMessages === 0 ? <MinusIcon className="min-h-5 min-w-5 h-5 w-5" /> : newMessages < 0 ? <ArrowTrendingDownIcon className="min-h-5 min-w-5 h-5 w-5" /> : <ArrowTrendingUpIcon className="min-h-5 min-w-5 h-5 w-5" />,
+      graph: newMessages === 0 ? <Icons.minus className={iconVariants({ variant: "normal" })} /> : newMessages < 0 ? <Icons.trendingDown className={iconVariants({ variant: "normal" })} /> : <Icons.trendingUp className={iconVariants({ variant: "normal" })} />,
      }}
     />
    </div>

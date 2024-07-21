@@ -57,12 +57,37 @@ html {
  @apply bg-accent-primary/20;
 }
 
+#nprogress {
+ @apply pointer-events-none;
+}
+
+#nprogress .bar {
+ @apply fixed left-0 top-0 !z-[99999] h-[4px] w-full;
+}
+
+.nprogress-custom-parent #nprogress .spinner,
+.nprogress-custom-parent #nprogress .bar {
+ @apply absolute;
+}
+
+[data-theme~="translucent"] {
+ @apply backdrop-blur-[5px] motion-reduce:transition-none;
+}
+
+.tippy-backdrop {
+ @apply !bg-neutral-700 !bg-opacity-[0.7];
+}
+
 img.twemoji {
  @apply relative top-[-0.1rem] inline-block h-[1em] w-[1em] align-middle;
 }
 
 main > div {
  @apply w-full;
+}
+
+.lucide {
+ @apply stroke-[1.5];
 }
 
 .custom-bg::after {

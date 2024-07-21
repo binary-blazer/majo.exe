@@ -1,10 +1,10 @@
 /* eslint-disable complexity */
 
-import { enableAutoModRule, createAutoModRule, syncAutoModRule } from "@majoexe/util/database";
+import { createAutoModRule, syncAutoModRule } from "@majoexe/util/database";
 import { ChannelType, AutoModerationRuleEventType, AutoModerationActionType, AutoModerationRuleTriggerType, EmbedBuilder, PermissionsBitField, codeBlock } from "discord.js";
 
 export async function enableAntiMention(client, interaction, guildSettings) {
- const createdRule = await syncAutoModRule(interaction, "anti-mention");
+ const createdRule = await syncAutoModRule(interaction.guild.id, "anti-mention");
 
  const limit = interaction.options.getInteger("limit") || 5;
  const exemptRoles = interaction.options.getRole("exempt-roles");
@@ -19,11 +19,9 @@ export async function enableAntiMention(client, interaction, guildSettings) {
  if (createdRule) {
   if (createdRule.enabled) return client.errorMessages.createSlashError(interaction, "❌ The anti-mention system is already `enabled`");
 
-  await interaction.guild.autoModerationRules.edit(createdRule.ruleId, {
+  await interaction.guild.autoModerationRules.edit(createdRule.id, {
    enabled: true,
   });
-
-  await enableAutoModRule(interaction.guild.id, createdRule.ruleId);
 
   const embed = new EmbedBuilder()
    .setColor(guildSettings?.embedColor || client.config.defaultColor)
@@ -32,7 +30,7 @@ export async function enableAntiMention(client, interaction, guildSettings) {
    .setDescription("The anti-mention system has been `enabled`. Mention spam will now be blocked.")
    .setFooter({
     text: `Requested by ${interaction.member.user.globalName || interaction.member.user.username}`,
-    iconURL: interaction.user.displayAvatarURL({
+    iconURL: interaction.member.user.displayAvatarURL({
      size: 256,
     }),
    })
@@ -156,7 +154,7 @@ export async function enableAntiMention(client, interaction, guildSettings) {
    ])
    .setFooter({
     text: `Requested by ${interaction.member.user.globalName || interaction.member.user.username}`,
-    iconURL: interaction.user.displayAvatarURL({
+    iconURL: interaction.member.user.displayAvatarURL({
      size: 256,
     }),
    })

@@ -1,16 +1,23 @@
 /* eslint-disable complexity */
 
-import { ArrowTopRightOnSquareIcon, ExclamationCircleIcon, ShieldExclamationIcon } from "@heroicons/react/24/outline";
 import prismaClient from "@majoexe/database";
-import { formatNumber, getFlags, getGuildMember, getServer } from "@majoexe/util/functions";
+import { getGuildMember, getServer } from "@majoexe/util/functions/guild";
+import { getFlags } from "@majoexe/util/functions/user";
+import { formatNumber } from "@majoexe/util/functions/util";
 import { getSession } from "lib/session";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Block } from "@/components/blocks/Block";
-import { ManageWarns } from "@/components/blocks/client/lists/Warns";
-import Image from "@/components/blocks/client/shared/Image";
-import { Tooltip } from "@/components/blocks/client/shared/Tooltip";
-import { Emojis } from "@/components/decorations/emojis";
+import { notFound } from "next/navigation";
+import { Block } from "@/components/Block";
+import { ButtonPrimary } from "@/components/Buttons";
+import { ManageWarns } from "@/components/client/lists/Warns";
+import { ChangeUserReputation } from "@/components/client/settings/ChangeUserReputation";
+import { ResetUserXP } from "@/components/client/settings/ResetUserXP";
+import Image from "@/components/client/shared/Image";
+import { Tooltip } from "@/components/client/shared/Tooltip";
+import { Emojis } from "@/components/DiscordEmojis";
+import { Header2 } from "@/components/Headers";
+import { Icons, iconVariants } from "@/components/Icons";
 
 export async function generateMetadata({ params }) {
  const { id, server } = params;
@@ -47,12 +54,12 @@ export async function generateMetadata({ params }) {
  };
 }
 
-export default async function ServerLogs({ params }) {
+export default async function UserPage({ params }) {
  const session = await getSession();
  if (!session || !session.access_token) redirect("/auth/login");
  const { server, id } = params;
  const serverDownload = await getServer(server);
- if (!serverDownload || serverDownload.code === 10004 || !serverDownload.bot) return redirect("/auth/error?error=It%20looks%20like%20the%20server%20you%20are%20trying%20to%20display%20does%20not%20exist");
+ if (!serverDownload || serverDownload.code === 10004 || !serverDownload.bot) return notFound();
  const serverMember = await getGuildMember(serverDownload.id, session.access_token);
  if (
   // prettier
@@ -61,7 +68,7 @@ export default async function ServerLogs({ params }) {
   !serverMember.permissions_names.includes("ManageGuild") ||
   !serverMember.permissions_names.includes("Administrator")
  )
-  return redirect("/auth/error?error=It%20looks%20like%20you%20do%20not%20have%20permission%20to%20access%20this%20page.");
+  return notFound();
 
  const user = await prismaClient.user.findFirst({
   where: {
@@ -102,11 +109,9 @@ export default async function ServerLogs({ params }) {
   },
  });
 
- if (!user) {
-  return redirect("/auth/error?error=It%20looks%20like%20the%20user%20you%20are%20trying%20to%20display%20does%20not%20exist");
- }
+ if (!user) return redirect("/auth/error?error=It%20looks%20like%20the%20user%20you%20are%20trying%20to%20display%20does%20not%20exist");
 
- const guild = await prismaClient.guild.upsert({
+ await prismaClient.guild.upsert({
   where: {
    guildId: serverDownload.id,
   },
@@ -143,8 +148,8 @@ export default async function ServerLogs({ params }) {
      <div className="bg-background-navbar flex h-[72px] w-auto flex-row justify-between gap-6 p-12">
       <div className="ml-[-16px] mt-[-20px] box-content flex items-center rounded-full">
        <Tooltip content="Click to see full size">
-        <Link href={`https://cdn.discordapp.com/avatars/${user.discordId}/${user.avatar}.${user.avatar.startsWith("a_") ? "gif" : "png"}?size=2048`} target="_blank" className="min-w-24 min-h-24 h-24 w-24">
-         <Image quality={100} src={`https://cdn.discordapp.com/avatars/${user.discordId}/${user.avatar}.${user.avatar.startsWith("a_") ? "gif" : "png"}`} alt={`${user.global_name || user.username} Avatar`} width={94} height={94} className="!border-background-navbar rounded-full !border-4 !border-solid backdrop-blur-sm duration-200 hover:opacity-75" />
+        <Link href={`https://cdn.discordapp.com/avatars/${user.discordId}/${user.avatar}.${user.avatar.startsWith("a_") ? "gif" : "png"}?size=2048`} target="_blank" className="h-24 min-h-24 w-24 min-w-24">
+         <Image quality={100} src={`https://cdn.discordapp.com/avatars/${user.discordId}/${user.avatar}.${user.avatar.startsWith("a_") ? "gif" : "png"}`} alt={`${user.global_name || user.username} Avatar`} width={94} height={94} className="!border-background-navbar rounded-full !border-4 !border-solid duration-200 hover:opacity-75" />
         </Link>
        </Tooltip>
        <div className="ml-2 flex items-center text-lg font-bold">
@@ -172,31 +177,31 @@ export default async function ServerLogs({ params }) {
          })}
        </div>
       </div>
-      <div className="mb-[-14px] hidden w-full items-end justify-end font-semibold md:flex">
-       <Link href={`https://discord.com/users/${user.discordId}`} target="_blank" className="bg-button-primary hover:bg-button-primary-hover flex h-[40px] cursor-pointer items-center rounded px-4 py-0 font-normal text-white duration-200 motion-reduce:transition-none">
-        <ArrowTopRightOnSquareIcon className="min-h-4 min-w-4 mr-2 h-4 w-4" aria-hidden="true" role="img" /> See global profile
-       </Link>
+      <div className="mb-[-14px] hidden w-full items-end justify-end md:flex">
+       <ButtonPrimary href={`https://discord.com/users/${user.discordId}`} target="_blank">
+        <Icons.externalLink className={iconVariants({ variant: "button" })} /> Discord profile
+       </ButtonPrimary>
       </div>
      </div>
      <div className="bg-background-menu-button/70 m-[8px_16px_16px] rounded-lg border border-neutral-800 p-4">
       <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:justify-start">
        <Tooltip content="Total gained XP">
         <div className="flex cursor-help items-center">
-         <div className="min-h-3 min-w-3 mr-2 h-3 w-3 rounded-full bg-[#81848f]" />
+         <div className="mr-2 h-3 min-h-3 w-3 min-w-3 rounded-full bg-[#81848f]" />
          {formatNumber(userXP || 0)} XP ({Math.floor(0.1 * Math.sqrt(userXP || 0))} level)
         </div>
        </Tooltip>
 
        <Tooltip content="Total reputation given by other users">
         <div className="flex cursor-help items-center">
-         <div className="min-h-3 min-w-3 mr-2 h-3 w-3 rounded-full bg-[#81848f]" />
+         <div className="mr-2 h-3 min-h-3 w-3 min-w-3 rounded-full bg-[#81848f]" />
          {formatNumber(userRepuation || 0)} Reputation
         </div>
        </Tooltip>
 
        <Tooltip content="Total warns given by moderators">
         <div className="flex cursor-help items-center">
-         <div className="min-h-3 min-w-3 mr-2 h-3 w-3 rounded-full bg-[#81848f]" />
+         <div className="mr-2 h-3 min-h-3 w-3 min-w-3 rounded-full bg-[#81848f]" />
          {formatNumber(user.guildWarns.length || 0)} warns
         </div>
        </Tooltip>
@@ -205,19 +210,40 @@ export default async function ServerLogs({ params }) {
     </>
    </div>
    <Block className="mt-4">
-    <h2 id="warns" className="mb-1 flex items-center justify-start gap-2 text-left text-2xl font-bold">
-     <ShieldExclamationIcon className="min-h-6 min-w-6 h-6 w-6" />
+    <Header2 id="warns">
+     <Icons.warning className={iconVariants({ variant: "large", className: "!stroke-2" })} />
      Warns
-    </h2>
+    </Header2>
     <p className="mb-4 text-left opacity-70">You can view all warns given to this user in this server. You can also manage them by deleting them.</p>
     {user.guildWarns.length === 0 ? (
-     <p className="mb-4 flex items-center justify-start gap-2 text-left">
-      <ExclamationCircleIcon className="min-h-5 min-w-5 h-5 w-5" />
+     <p className="mb-4 flex items-center justify-start gap-2 text-left text-red-400">
+      <Icons.warning className={iconVariants({ variant: "normal", className: "mr-1" })} />
       This user has no warns in this server.
      </p>
     ) : (
      <ManageWarns data={user.guildWarns} guildId={serverDownload.id} />
     )}
+   </Block>
+   <Block className="mt-4">
+    <Header2 id="reputation">
+     <Icons.like className={iconVariants({ variant: "large", className: "!stroke-2" })} />
+     Reputation
+    </Header2>
+    <p className="mt-2 text-white/70">Change the reputation of this user in this server, set it to 0 to remove it.</p>
+    <ChangeUserReputation userId={user.discordId} guildId={serverDownload.id} userReputation={userRepuation} />
+   </Block>
+   <Block theme="danger" className="mt-4">
+    <Header2 id="reset-xp" className="text-red-400">
+     <Icons.warning className={iconVariants({ variant: "large", className: "!stroke-2" })} />
+     Reset XP
+    </Header2>
+    <p className="mt-2 text-white/70">Reset the XP of this user in this server. This action cannot be undone and will reset the XP of this user to 0.</p>
+
+    <p className="mt-2 text-white/70">
+     <span className="font-semibold">The user currently has: </span>
+     {formatNumber(userXP || 0)} XP ({Math.floor(0.1 * Math.sqrt(userXP || 0))} level)
+    </p>
+    <ResetUserXP userId={user.discordId} guildId={serverDownload.id} />
    </Block>
   </>
  );

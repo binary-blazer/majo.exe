@@ -1,6 +1,8 @@
+/* eslint-disable complexity */
+
 import { globalConfig } from "@majoexe/config";
 import prismaClient from "@majoexe/database";
-import { getServer, getGuildMember } from "@majoexe/util/functions";
+import { getServer, getGuildMember } from "@majoexe/util/functions/guild";
 import { getSession } from "lib/session";
 import { NextResponse } from "next/server";
 
@@ -17,7 +19,9 @@ export async function POST(request) {
     {
      status: 401,
      headers: {
-      "server-timing": `response;dur=${Date.now() - start}`,
+      ...(process.env.NODE_ENV !== "production" && {
+       "Server-Timing": `response;dur=${Date.now() - start}ms`,
+      }),
      },
     }
    );
@@ -34,7 +38,9 @@ export async function POST(request) {
     {
      status: 400,
      headers: {
-      "server-timing": `response;dur=${Date.now() - start}`,
+      ...(process.env.NODE_ENV !== "production" && {
+       "Server-Timing": `response;dur=${Date.now() - start}ms`,
+      }),
      },
     }
    );
@@ -51,7 +57,9 @@ export async function POST(request) {
     {
      status: 404,
      headers: {
-      "server-timing": `response;dur=${Date.now() - start}`,
+      ...(process.env.NODE_ENV !== "production" && {
+       "Server-Timing": `response;dur=${Date.now() - start}ms`,
+      }),
      },
     }
    );
@@ -66,7 +74,9 @@ export async function POST(request) {
     {
      status: 404,
      headers: {
-      "server-timing": `response;dur=${Date.now() - start}`,
+      ...(process.env.NODE_ENV !== "production" && {
+       "Server-Timing": `response;dur=${Date.now() - start}ms`,
+      }),
      },
     }
    );
@@ -83,7 +93,9 @@ export async function POST(request) {
     {
      status: 401,
      headers: {
-      "server-timing": `response;dur=${Date.now() - start}`,
+      ...(process.env.NODE_ENV !== "production" && {
+       "Server-Timing": `response;dur=${Date.now() - start}ms`,
+      }),
      },
     }
    );
@@ -98,7 +110,9 @@ export async function POST(request) {
     {
      status: 400,
      headers: {
-      "server-timing": `response;dur=${Date.now() - start}`,
+      ...(process.env.NODE_ENV !== "production" && {
+       "Server-Timing": `response;dur=${Date.now() - start}ms`,
+      }),
      },
     }
    );
@@ -115,7 +129,6 @@ export async function POST(request) {
     data: {
      guildId: id,
      embedColor: color,
-     embedLastChanged: new Date(),
     },
    });
 
@@ -149,7 +162,9 @@ export async function POST(request) {
     {
      status: 200,
      headers: {
-      "server-timing": `response;dur=${Date.now() - start}`,
+      ...(process.env.NODE_ENV !== "production" && {
+       "Server-Timing": `response;dur=${Date.now() - start}ms`,
+      }),
      },
     }
    );
@@ -164,22 +179,9 @@ export async function POST(request) {
     {
      status: 200,
      headers: {
-      "server-timing": `response;dur=${Date.now() - start}`,
-     },
-    }
-   );
-  }
-
-  if (new Date().getTime() - current.embedLastChanged.getTime() < 10000) {
-   return NextResponse.json(
-    {
-     error: "You can only change the embed color every 10 seconds",
-     code: 400,
-    },
-    {
-     status: 200,
-     headers: {
-      "server-timing": `response;dur=${Date.now() - start}`,
+      ...(process.env.NODE_ENV !== "production" && {
+       "Server-Timing": `response;dur=${Date.now() - start}ms`,
+      }),
      },
     }
    );
@@ -191,7 +193,6 @@ export async function POST(request) {
    },
    data: {
     embedColor: color,
-    embedLastChanged: new Date(),
    },
   });
 
@@ -225,7 +226,9 @@ export async function POST(request) {
    {
     status: 200,
     headers: {
-     "server-timing": `response;dur=${Date.now() - start}`,
+     ...(process.env.NODE_ENV !== "production" && {
+      "Server-Timing": `response;dur=${Date.now() - start}ms`,
+     }),
     },
    }
   );
@@ -259,7 +262,9 @@ export async function PUT(request) {
     {
      status: 401,
      headers: {
-      "server-timing": `response;dur=${Date.now() - start}`,
+      ...(process.env.NODE_ENV !== "production" && {
+       "Server-Timing": `response;dur=${Date.now() - start}ms`,
+      }),
      },
     }
    );
@@ -275,7 +280,9 @@ export async function PUT(request) {
     {
      status: 400,
      headers: {
-      "server-timing": `response;dur=${Date.now() - start}`,
+      ...(process.env.NODE_ENV !== "production" && {
+       "Server-Timing": `response;dur=${Date.now() - start}ms`,
+      }),
      },
     }
    );
@@ -292,7 +299,9 @@ export async function PUT(request) {
     {
      status: 404,
      headers: {
-      "server-timing": `response;dur=${Date.now() - start}`,
+      ...(process.env.NODE_ENV !== "production" && {
+       "Server-Timing": `response;dur=${Date.now() - start}ms`,
+      }),
      },
     }
    );
@@ -307,7 +316,9 @@ export async function PUT(request) {
     {
      status: 404,
      headers: {
-      "server-timing": `response;dur=${Date.now() - start}`,
+      ...(process.env.NODE_ENV !== "production" && {
+       "Server-Timing": `response;dur=${Date.now() - start}ms`,
+      }),
      },
     }
    );
@@ -324,7 +335,9 @@ export async function PUT(request) {
     {
      status: 401,
      headers: {
-      "server-timing": `response;dur=${Date.now() - start}`,
+      ...(process.env.NODE_ENV !== "production" && {
+       "Server-Timing": `response;dur=${Date.now() - start}ms`,
+      }),
      },
     }
    );
@@ -369,7 +382,9 @@ export async function PUT(request) {
     {
      status: 200,
      headers: {
-      "server-timing": `response;dur=${Date.now() - start}`,
+      ...(process.env.NODE_ENV !== "production" && {
+       "Server-Timing": `response;dur=${Date.now() - start}ms`,
+      }),
      },
     }
    );
@@ -384,22 +399,9 @@ export async function PUT(request) {
     {
      status: 200,
      headers: {
-      "server-timing": `response;dur=${Date.now() - start}`,
-     },
-    }
-   );
-  }
-
-  if (new Date().getTime() - current.embedLastChanged.getTime() < 10000) {
-   return NextResponse.json(
-    {
-     error: "You can only change the embed color every 10 seconds",
-     code: 400,
-    },
-    {
-     status: 200,
-     headers: {
-      "server-timing": `response;dur=${Date.now() - start}`,
+      ...(process.env.NODE_ENV !== "production" && {
+       "Server-Timing": `response;dur=${Date.now() - start}ms`,
+      }),
      },
     }
    );
@@ -411,7 +413,6 @@ export async function PUT(request) {
    },
    data: {
     embedColor: globalConfig.defaultColor,
-    embedLastChanged: new Date(),
    },
   });
 
@@ -439,7 +440,9 @@ export async function PUT(request) {
    {
     status: 200,
     headers: {
-     "server-timing": `response;dur=${Date.now() - start}`,
+     ...(process.env.NODE_ENV !== "production" && {
+      "Server-Timing": `response;dur=${Date.now() - start}ms`,
+     }),
     },
    }
   );

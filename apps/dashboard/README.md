@@ -9,7 +9,7 @@
 
 ## 🤖 Self-Hosting
 
-1. Clone [this repository]
+1. Clone [this repository](https://github.com/igorkowalczyk/majo.exe) `git clone https://github.com/iigorkowalczyk/majo.exe.git`
 2. Go to `/packages/database/` directory and follow [Database Setup](/packages/database/README.md) tutorial
 3. Grab a Discord Bot token and client secret on [Discord's developer portal](https://discord.com/developers/applications) [Tutorial](#-discord-credentials)
 4. Add redirect URL to Discord's developer portal (https://your-website.com/api/auth/callback/discord)
@@ -23,25 +23,31 @@
    - `HOTJAR_ID` - Your Hotjar ID (optional)
    - Database URLs [[Tutorial](/packages/database/README.md)]
      - `DATABASE_URL` - Main database URL
-     - `DIRECT_URL` - Direct database URL (optional)
-7. Go to `/apps/dashboard/` directory
-8. Run `pnpm i` to install all dependencies
-9. Run `pnpm run dev` or `pnpm run deploy` to start dashboard
+     - `DATABASE_URL_UNPOOLED` - Direct database URL (optional)
+7. Run `pnpm i` to install all dependencies
+8. Go to `/packages/config/` directory and change values in `/configs/dashboard.js` to your values
+9. Go back to main directory and run `pnpm run dev --filter=dashboard` or `pnpm run deploy --filter=dashboard` to start dashboard
+10. That's it! You can now visit your dashboard for the first time!
 
 ## ▲ Vercel Deploy
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FIgorKowalczyk%2Fmajo.exe&env=TOKEN,SECRET,CLIENT_ID,CLIENT_SECRET,NEXTAUTH_URL,DATABASE_URL,DIRECT_URL,SHADOW_DATABASE_URL,NEXT_PUBLIC_URL&envDescription=Tokens%20needed%20for%20Dashboard&envLink=https%3A%2F%2Fgithub.com%2Figorkowalczyk%2Fmajo.exe&project-name=majo-exe&repository-name=majo-exe&demo-title=Majo.exe%20-%20Dashboard&demo-description=Majo.exe%20Dashboard%20-%20Next.js%20application%20for%20managing%20Majo.exe%20Discord%20bot.&demo-url=https%3A%2F%2Fmajoexe.xyz&demo-image=https%3A%2F%2Fgithub.com%2FIgorKowalczyk%2Fmajo.exe%2Fassets%2F49127376%2F02d4d63d-2cea-44f2-88b6-7e645dc272ea)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FIgorKowalczyk%2Fmajo.exe&env=TOKEN,SECRET,CLIENT_ID,CLIENT_SECRET,NEXTAUTH_URL,DATABASE_URL,DATABASE_URL_UNPOOLED,NEXT_PUBLIC_URL&envDescription=Tokens%20needed%20for%20Dashboard&envLink=https%3A%2F%2Fgithub.com%2Figorkowalczyk%2Fmajo.exe&project-name=majo-exe&repository-name=majo-exe&demo-title=Majo.exe%20-%20Dashboard&demo-description=Majo.exe%20Dashboard%20-%20Next.js%20application%20for%20managing%20Majo.exe%20Discord%20bot.&demo-url=https%3A%2F%2Fmajoexe.xyz&demo-image=https%3A%2F%2Fgithub.com%2FIgorKowalczyk%2Fmajo.exe%2Fassets%2F49127376%2F02d4d63d-2cea-44f2-88b6-7e645dc272ea)
 
-1. Go to `/packages/database/` directory and follow [Database Setup](/packages/database/README.md) tutorial
-2. Grab a Discord Bot token and client secret on [Discord's developer portal](https://discord.com/developers/applications) [Tutorial](/apps/dashboard/README.md#-discord-credentials)
-3. Add redirect URL to Discord's developer portal (https://your-website.com/api/auth/callback/discord)
-4. Import this repository to Vercel (click button above)
-5. Set environment variables from your root `.env` file
-6. Click `Deploy` button
+1. Click `Deploy with Vercel` button above and follow instructions
+2. Go to `/packages/database/` directory and follow [Database Setup](/packages/database/README.md) tutorial
+3. Grab a Discord Bot token and client secret on [Discord's developer portal](https://discord.com/developers/applications) [Tutorial](/apps/dashboard/README.md#-discord-credentials)
+4. Add redirect URL to Discord's developer portal (https://your-project.vercel.app/api/auth/callback/discord)
+5. In your forked repository go to /packages/config/ directory and change values in /configs/dashboard.js to your values
+6. Import this repository to Vercel (click button above)
+7. Set environment variables from your root `.env` file in Vercel dashboard
+8. Set Root Directory in Vercel dashboard to `/apps/dashboard/` (Also include files from outside the root directory)
+9. Click `Deploy` button
+10. That's it! You can now visit your dashboard for the first time!
 
-##### Example `.env` file
+> [!NOTE]
+> Your Deploy URL for Vercel will be `https://project-name.vercel.app/`, but you can add your own domain in Vercel dashboard. Don't forget to add it to Discord's developer portal.
 
-Remember - the file is super secret, better to not share it!
+## 🔒 Example `.env` file
 
 ```
 TOKEN=DISCORD_BOT_TOKEN
@@ -54,7 +60,7 @@ NEXT_PUBLIC_URL=YOUR_WEBSITE_URL
 ```
 
 > [!WARNING]
-> This file should be in **root directory** of the project.
+> This file should be in **root directory** of the project. This file is **super secret**, better to not share it!
 
 ---
 
@@ -65,11 +71,13 @@ Ensure your setup meets these prerequisites before setting up Majo.exe:
 - `PostgreSQL 14x` or higher
 - `Node.js 18x` or higher
 - `(Any)` Linux x64¹
-- `512MB` of RAM (minimum)
-- `3GB` of hard drive space (minimum)
+- `~512MB` of RAM (minimum)
+- `~3GB` of hard drive space (minimum)
 
+<!-- prettier-ignore-start -->
 > [!NOTE]
-> 1: Debian based distros are recommended, Dashboard can also run on Windows and MacOS but it's not recommended.
+> 1. Debian based distros are recommended, Dashboard can also run on Windows and MacOS but it's not recommended.
+<!-- prettier-ignore-end -->
 
 ## 📝 Contributors
 
@@ -86,10 +94,9 @@ Ensure your setup meets these prerequisites before setting up Majo.exe:
 
 **These wonderful people and services have helped develop Majo.exe, without them this project would not exist. Thanks goes to these wonderful people!**
 
-|                                                                                                                                                             | Sponsor                                                             | Description                                                                                                                                                         |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| ![TrestHost Logo](https://media.discordapp.net/attachments/1016532713173426297/1137629737334870038/tresthost.png?width=112&height=112)                      | [**TrestHost**](https://dash.tresthost.me/register?ref=majonez.exe) | **TrestHost is a good and powerful hosting provider** providing servers from the **USA and Germany**. Try us out today!                                             |
-| ![Terohost Logo](https://media.discordapp.net/attachments/905722570286960650/1139902959308783677/943e2f13a56ed86da3bfd4ffcbd5094e.png?width=112&height=112) | [Terohost](https://my.terohost.com/aff.php?aff=17)                  | **TeroHost is a Discord Bot hosting** provider that helps take care of all your needs regarding your Discord Bot to ensure your bot perfect uptime, ping and speed. |
+|                                                                      | Sponsor                                                             | Description                                                                                                             |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------- |
+| ![TrestHost Logo](https://majoexe.xyz/assets/sponsors/tresthost.png) | [**TrestHost**](https://dash.tresthost.me/register?ref=majonez.exe) | **TrestHost is a good and powerful hosting provider** providing servers from the **USA and Germany**. Try us out today! |
 
 ## ⁉️ Issues
 

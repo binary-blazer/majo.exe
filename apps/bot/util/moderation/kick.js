@@ -17,7 +17,7 @@ export async function kickMember(client, interaction, color) {
    return client.errorMessages.createSlashError(interaction, "❌ I need `KICK_MEMBERS` permission to kick members");
   }
 
-  if (user.id === interaction.user.id) {
+  if (user.id === interaction.member.user.id) {
    return client.errorMessages.createSlashError(interaction, "❌ You can't kick yourself");
   }
 
@@ -33,7 +33,7 @@ export async function kickMember(client, interaction, color) {
    return client.errorMessages.createSlashError(interaction, "❌ This user has higher or equal roles than me");
   }
 
-  await interaction.guild.members.kick(user, { reason: reason });
+  await interaction.guild.members.kick(user, { reason });
 
   const embed = new EmbedBuilder()
    .setColor(color)

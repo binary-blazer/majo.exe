@@ -1,7 +1,7 @@
 datasource db {
  provider  = "postgresql"
  url       = env("DATABASE_URL")
- directUrl = env("DIRECT_URL")
+ directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 generator client {
@@ -108,31 +108,36 @@ model Commands {
 
 // Discord guilds
 model Guild {
- id                                 String                    @id @default(cuid())
- guildId                            String                    @unique @map(name: "guild_id")
- enableXP                           Boolean                   @default(true) @map(name: "enable_xp")
- enableXPLastChanged                DateTime                  @default(now()) @map(name: "enable_xp_last_changed")
- enableXPLevelUpMessage             Boolean                   @default(true) @map(name: "sent_level_messages")
- enableXPLevelUpMessageLastChanged  DateTime                  @default(now()) @map(name: "sent_level_messages_last_changed")
- enableWarningAutomation            Boolean                   @default(false) @map(name: "enable_warning_automation")
- enableWarningAutomationLastChanged DateTime                  @default(now()) @map(name: "enable_warning_automation_last_changed")
- embedColor                         String                    @default("#5865F2") @map(name: "embed_color")
- embedLastChanged                   DateTime                  @default(now()) @map(name: "embed_last_changed")
- lastUpdated                        DateTime                  @default(now()) @updatedAt @map(name: "last_updated")
- publicPage                         Boolean                   @default(false) @map(name: "public_page")
- publicPageLastChanged              DateTime                  @default(now()) @map(name: "public_page_last_changed")
- vanity                             String?                   @unique
- guildLogs                          GuildLogs[]
- guildXp                            GuildXp[]
- guildJoin                          GuildJoin[]
- guildLeave                         GuildLeave[]
- reputation                         Reputation[]
- giveaway                           Giveaways[]
- guildMessage                       GuildMessage[]
- guildDisabledCommands              GuildDisabledCommands[]
- guildDisabledCategories            GuildDisabledCategories[]
- autoMod                            AutoMod[]
- guildWarns                         GuildWarns[]
+ id          String   @id @default(cuid())
+ guildId     String   @unique @map(name: "guild_id")
+ lastUpdated DateTime @default(now()) @updatedAt @map(name: "last_updated")
+ createdAt   DateTime @default(now()) @map(name: "created_at")
+
+ // XP Module
+ enableXP                          Boolean  @default(true) @map(name: "enable_xp")
+ enableXPLastChanged               DateTime @default(now()) @map(name: "enable_xp_last_changed")
+ enableXPLevelUpMessage            Boolean  @default(true) @map(name: "sent_level_messages")
+ enableXPLevelUpMessageLastChanged DateTime @default(now()) @map(name: "sent_level_messages_last_changed")
+
+ // Guild customizations
+ embedColor String  @default("#5865F2") @map(name: "embed_color")
+ publicPage Boolean @default(false) @map(name: "public_page")
+ vanity     String? @unique
+
+ // Guild modules
+ guildLogs               GuildLogs[]
+ guildXp                 GuildXp[]
+ guildJoin               GuildJoin[]
+ guildLeave              GuildLeave[]
+ reputation              Reputation[]
+ giveaway                Giveaways[]
+ guildMessage            GuildMessage[]
+ guildDisabledCommands   GuildDisabledCommands[]
+ guildDisabledCategories GuildDisabledCategories[]
+ autoMod                 AutoMod[]
+ guildWarns              GuildWarns[]
+ guildWelcomeMessage     GuildWelcomeMessage?
+ guildLeaveMessage       GuildLeaveMessage?
 
  @@map(name: "guilds")
 }
@@ -248,7 +253,6 @@ model AutoMod {
  guildId   String   @map(name: "guild_id")
  ruleId    String   @unique @map(name: "rule_id")
  ruleType  String   @map(name: "rule_type")
- enabled   Boolean  @default(false)
  createdAt DateTime @default(now()) @map(name: "created_at")
  guild     Guild    @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
 
@@ -267,4 +271,34 @@ model GuildWarns {
  user        User     @relation(fields: [userId], references: [discordId], onDelete: Cascade)
 
  @@map(name: "guild_warns")
+}
+
+// Guild welcome message
+model GuildWelcomeMessage {
+ id          String   @id @default(cuid())
+ guildId     String   @unique @map(name: "guild_id")
+ channelId   String   @map(name: "channel_id")
+ title       String   @default("🎉 Welcome to the server {user}!")
+ description String   @default("> Welcome to **{guild}** We hope you enjoy your stay here!")
+ embedColor  String   @default("#5865F2") @map(name: "embed_color")
+ enabled     Boolean  @default(false)
+ createdAt   DateTime @default(now()) @map(name: "created_at")
+ guild       Guild    @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
+
+ @@map(name: "guild_welcome_message")
+}
+
+// Guild leave message
+model GuildLeaveMessage {
+ id          String   @id @default(cuid())
+ guildId     String   @unique @map(name: "guild_id")
+ channelId   String   @map(name: "channel_id")
+ title       String   @default("👋 Goodbye {user}!")
+ description String   @default("> We're sorry to see you go!")
+ embedColor  String   @default("#5865F2") @map(name: "embed_color")
+ enabled     Boolean  @default(false)
+ createdAt   DateTime @default(now()) @map(name: "created_at")
+ guild       Guild    @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
+
+ @@map(name: "guild_leave_message")
 }

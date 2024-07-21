@@ -117,7 +117,7 @@ export default {
    }
 
    await user.roles.add(role, {
-    reason: reason,
+    reason,
    });
 
    const embed = new EmbedBuilder()
@@ -178,7 +178,7 @@ export default {
    }
 
    await user.roles.remove(role, {
-    reason: reason,
+    reason,
    });
 
    const embed = new EmbedBuilder()
@@ -210,7 +210,7 @@ export default {
     .setColor(role.color || guildSettings?.embedColor || client.config.defaultColor)
     .setFooter({
      text: `Requested by ${interaction.member.user.globalName || interaction.member.user.username}`,
-     iconURL: interaction.user.displayAvatarURL({
+     iconURL: interaction.member.user.displayAvatarURL({
       size: 256,
      }),
     })

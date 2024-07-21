@@ -131,13 +131,13 @@ export default {
        },
        {
         name: `${client.config.emojis.link} Emoji URL`,
-        value: `> <${emoji.url}>`,
+        value: `> <${emoji.imageURL({ dynamic: true, size: 256 })}>`,
        },
       ])
-      .setThumbnail(emoji.url)
+      .setThumbnail(emoji.imageURL({ dynamic: true, size: 256 }))
       .setFooter({
        text: `Requested by ${interaction.member.user.globalName || interaction.member.user.username}`,
-       iconURL: interaction.user.displayAvatarURL({
+       iconURL: interaction.member.user.displayAvatarURL({
         size: 256,
        }),
       });
@@ -198,13 +198,13 @@ export default {
       },
       {
        name: `${client.config.emojis.link} Emoji URL`,
-       value: `> <${emojiToDelete.url}>`,
+       value: `> <${emojiToDelete.imageURL({ dynamic: true, size: 256 })}>`,
       },
      ])
-     .setThumbnail(emojiToDelete.url)
+     .setThumbnail(emojiToDelete.imageURL({ dynamic: true, size: 256 }))
      .setFooter({
       text: `Requested by ${interaction.member.user.globalName || interaction.member.user.username}`,
-      iconURL: interaction.user.displayAvatarURL({
+      iconURL: interaction.member.user.displayAvatarURL({
        size: 256,
       }),
      });
@@ -262,13 +262,13 @@ export default {
       },
       {
        name: `${client.config.emojis.link} Emoji URL`,
-       value: `> <${emojiToGet.url}>`,
+       value: `> ${emojiToGet.imageURL({ dynamic: true, size: 256 })}`,
       },
      ])
-     .setThumbnail(emojiToGet.url)
+     .setThumbnail(emojiToGet.imageURL({ dynamic: true, size: 256 }))
      .setFooter({
       text: `Requested by ${interaction.member.user.globalName || interaction.member.user.username}`,
-      iconURL: interaction.user.displayAvatarURL({
+      iconURL: interaction.member.user.displayAvatarURL({
        size: 256,
       }),
      });
@@ -311,7 +311,7 @@ export default {
      )
      .setFooter({
       text: `Requested by ${interaction.member.user.globalName || interaction.member.user.username}`,
-      iconURL: interaction.user.displayAvatarURL({
+      iconURL: interaction.member.user.displayAvatarURL({
        size: 256,
       }),
      });

@@ -1,6 +1,6 @@
 const timeout = new Map();
 import prismaClient from "@majoexe/database";
-import { formatDuration } from "@majoexe/util/functions";
+import { formatDuration } from "@majoexe/util/functions/util";
 import { EmbedBuilder } from "discord.js";
 
 export default {
@@ -27,7 +27,7 @@ export default {
   const key = `${interaction.member.user.id}-suggest`;
 
   if (timeout.has(key) && timeout.get(key).time > Date.now()) {
-   const time = timeout.get(key).time;
+   const { time } = timeout.get(key);
    const duration = formatDuration(time - Date.now());
 
    const embed = new EmbedBuilder()
@@ -66,12 +66,7 @@ export default {
    data: {
     message: suggestion,
     userId: interaction.member.user.id,
-    guild: {
-     connectOrCreate: {
-      where: { guildId: interaction.guild.id },
-      create: { guildId: interaction.guild.id },
-     },
-    },
+    guildId: interaction.guild.id,
    },
   });
 

@@ -1,26 +1,27 @@
-import { SparklesIcon } from "@heroicons/react/24/outline";
 import prismaClient from "@majoexe/database";
-import { getGuildMember, getServer } from "@majoexe/util/functions";
+import { getGuildMember, getServer } from "@majoexe/util/functions/guild";
 import { getSession } from "lib/session";
 import { redirect } from "next/navigation";
-import { Block } from "@/components/blocks/Block";
-import { Leaderboard } from "@/components/blocks/client/lists/Leaderboard";
-import { Header1, Header5 } from "@/components/blocks/Headers";
+import { notFound } from "next/navigation";
+import { Block } from "@/components/Block";
+import { Leaderboard } from "@/components/client/lists/Leaderboard";
+import { Header1 } from "@/components/Headers";
 import "tippy.js/dist/backdrop.css";
 import "tippy.js/animations/shift-away.css";
 import "tippy.js/dist/tippy.css";
+import { Icons, iconVariants } from "@/components/Icons";
 
 export const metadata = {
  title: "Leaderboard",
  description: "View the leaderboard for your server.",
 };
 
-export default async function ServerLeaderboard({ params }) {
+export default async function LeaderboardPage({ params }) {
  const session = await getSession();
  if (!session || !session.access_token) redirect("/auth/login");
  const { server } = params;
  const serverDownload = await getServer(server);
- if (!serverDownload || serverDownload.code === 10004 || !serverDownload.bot) return redirect("/auth/error?error=It%20looks%20like%20the%20server%20you%20are%20trying%20to%20display%20does%20not%20exist");
+ if (!serverDownload || serverDownload.code === 10004 || !serverDownload.bot) return notFound();
  const serverMember = await getGuildMember(serverDownload.id, session.access_token);
  if (
   // prettier
@@ -29,7 +30,7 @@ export default async function ServerLeaderboard({ params }) {
   !serverMember.permissions_names.includes("ManageGuild") ||
   !serverMember.permissions_names.includes("Administrator")
  )
-  return redirect("/auth/error?error=It%20looks%20like%20you%20do%20not%20have%20permission%20to%20access%20this%20page.");
+  return notFound();
 
  const guild = await prismaClient.guild.upsert({
   where: {
@@ -68,32 +69,13 @@ export default async function ServerLeaderboard({ params }) {
   };
  });
 
- const currentUser = guild.guildXp.findIndex((x) => x.user.discordId === session.id) + 1;
-
  return (
   <>
    <Header1>
-    <SparklesIcon className="min-h-9 min-w-9 h-9 w-9" />
+    <Icons.sparkles className={iconVariants({ variant: "extraLarge" })} />
     Leaderboard
    </Header1>
-   <Header5 className="mb-4 mt-2 !justify-start !text-left">
-    <span>
-     There are {data.length} users in the leaderboard right now.{" "}
-     {currentUser && currentUser > 0 && (
-      <span>
-       You are currently <span className="text-accent-primary">#{currentUser}</span> in the leaderboard.
-      </span>
-     )}
-    </span>
-   </Header5>
-   <Block className="flex w-full overflow-auto">
-    {data.length === 0 && <h3 className="text-left text-xl font-bold">Sadly, there are no users in the leaderboard right now!</h3>}
-    {data.length > 0 && (
-     <div className="mt-4 w-full">
-      <Leaderboard data={data} />
-     </div>
-    )}
-   </Block>
+   <Block className="mt-4 flex w-full overflow-auto">{data.length > 0 ? <Leaderboard data={data} /> : <span className="opacity-50">No users found. Maybe you should try talking in chat?</span>}</Block>
   </>
  );
 }

@@ -1,18 +1,18 @@
-import { SquaresPlusIcon, CubeIcon, CubeTransparentIcon } from "@heroicons/react/24/outline";
-import { Block } from "@/components/blocks/Block";
-import { Header1, Header2 } from "@/components/blocks/Headers";
-import { InputSkeleton, TextSkeleton } from "@/components/blocks/Skeletons";
+import { Block } from "@/components/Block";
+import { Header1, Header2 } from "@/components/Headers";
+import { Icons, iconVariants } from "@/components/Icons";
+import { InputSkeleton, TextSkeleton } from "@/components/Skeletons";
 
 export default async function Loading() {
  return (
   <>
    <Header1>
-    <SquaresPlusIcon className="min-h-9 min-w-9 h-9 w-9" />
+    <Icons.packagePlus className={iconVariants({ variant: "extraLarge" })} />
     Modules
    </Header1>
-   <Block>
+   <Block className="mt-4">
     <Header2>
-     <CubeIcon className="min-h-8 min-w-8 h-8 w-8" />
+     <Icons.blocks className={iconVariants({ variant: "large", className: "!stroke-2" })} />
      Categories
     </Header2>
     <p className="mb-4 mt-2 text-left">Enable or disable categories of commands.</p>
@@ -32,7 +32,7 @@ export default async function Loading() {
 
    <Block className="mt-4">
     <Header2>
-     <CubeTransparentIcon className="min-h-8 min-w-8 h-8 w-8" />
+     <Icons.slash className={iconVariants({ variant: "large", className: "!stroke-2" })} />
      Commands
     </Header2>
     <p className="mb-4 mt-2 text-left">Enable or disable commands.</p>

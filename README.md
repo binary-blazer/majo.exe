@@ -24,14 +24,18 @@ Go to [this link](https://discord.com/oauth2/authorize/?permissions=4294967287&s
 ## 🖥️ Hosting
 
 We are hosting Majo.exe on our own servers. Majo.exe will be online 24/7. [Invite Majo here!](https://majoexe.xyz/api/invite)  
-However, if you want to host Majo.exe yourself see links below.
+However, if you want to host Majo.exe yourself, you can do it. [Check out our tutorials](#-tutorials) to learn how to do it.
+
+<!-- prettier-ignore-start -->
+> [!IMPORTANT]
+> **This project is not for beginners.** If you are not familiar with Node.js, Prisma, Discord.js or any other technology used in this project, you should not host Majo.exe yourself!
+<!-- prettier-ignore-end -->
+
+### 📝 Tutorials
 
 - **[🤖 Bot setup tutorial](/apps/bot/README.md)**
 - **[🔩 Dashboard setup tutorial](/apps/dashboard/README.md)**
 - **[📝 Database setup tutorial](/packages/database/README.md)**
-
-> [!WARNING]
-> There is one global `.env` file for all projects. **Do not create `.env` file in `apps/bot`, `packages/database` or `apps/dashboard` folders!** **This can cause problems and potential security issues.**
 
 ## ⚙️ System Requirements
 
@@ -40,13 +44,15 @@ Ensure your setup meets these prerequisites before setting up Majo.exe:
 - `PostgreSQL 14x` or higher
 - `Node.js 18x` or higher
 - `(Any)` Linux x64¹
-- `512MB` of RAM (minimum)
-- `3GB` of hard drive space (minimum)
+- `~512MB` of RAM (minimum)
+- `~3GB` of hard drive space (minimum)
 
+<!-- prettier-ignore-start -->
 > [!NOTE]
-> 1: Debian based distros are recommended, bot can also run on Windows and MacOS but it's not recommended.
+> 1. Debian based distros are recommended, bot can also run on Windows and MacOS but it's not recommended.
+<!-- prettier-ignore-end -->
 
-## Global `.env` file
+## 🔒 Global `.env` file
 
 | Variable                    | Description                                      | Required (Bot) | Required (Dashboard) |
 | --------------------------- | ------------------------------------------------ | -------------- | -------------------- |
@@ -54,7 +60,7 @@ Ensure your setup meets these prerequisites before setting up Majo.exe:
 | `CLIENT_ID`                 | Discord client ID                                | `✅ Yes`       | `✅ Yes`             |
 | `CLIENT_SECRET`             | Discord client secret                            | `❌ No`        | `✅ Yes`             |
 | `DATABASE_URL`              | Main database connection string                  | `✅ Yes`       | `✅ Yes`             |
-| `DIRECT_URL`                | Non-pooling database connection string           | `❌ No`        | `❌ No`              |
+| `DATABASE_URL_UNPOOLED`                | Non-pooling database connection string           | `❌ No`        | `❌ No`              |
 | `REDIS_URL`¹                | Redis Cache connection string                    | `❌ No`        | `❌ No`              |
 | `SECRET`                    | Secret string (minimum 32 characters)            | `❌ No`        | `✅ Yes`             |
 | `NEXTAUTH_URL`              | NextAuth.js URL (e.g., http://localhost:3000)    | `❌ No`        | `✅ Yes`             |
@@ -65,12 +71,15 @@ Ensure your setup meets these prerequisites before setting up Majo.exe:
 
 <!-- prettier-ignore-start -->
 > [!NOTE]
-> 1: `REDIS_URL` enables caching. If you don't want to use Redis caching, leave this variable empty. Majo.exe will use Memory caching instead.  
-> 2: `NEXT_PUBLIC_URL` is required only if you want to also include the dashboard.  
-> 3: `DISCORD_SUPPORT_SERVER_ID` is required only if you want to automatically add users to your own Discord server when they log in to the dashboard. Please note that the bot needs `Manage Server` permission in the server!\
-> 4: `TOPGG_API_KEY` is required only if you want to automatically post server count to [top.gg](https://top.gg).
+> 1. `REDIS_URL` enables caching. If you don't want to use Redis caching, leave this variable empty. Majo.exe will use Memory caching instead.  
+> 2. `NEXT_PUBLIC_URL` is required only if you want to also include the dashboard.  
+> 3. `DISCORD_SUPPORT_SERVER_ID` is required only if you want to automatically add users to your own Discord server when they log in to the dashboard. Please note that the bot needs `Manage Server` permission in the server!\
+> 4. `TOPGG_API_KEY` is required only if you want to automatically post server count to [top.gg](https://top.gg).
 
 <!-- prettier-ignore-end -->
+
+> [!WARNING]
+> There is one global `.env` file for all projects. **Do not create `.env` file in `apps/bot`, `packages/database` or `apps/dashboard` folders!** **This can cause problems and potential security issues.**
 
 ## 📝 Contributors
 
@@ -89,8 +98,38 @@ Ensure your setup meets these prerequisites before setting up Majo.exe:
 
 |                                                                                                                                                             | Sponsor                                                             | Description                                                                                                                                                         |
 | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| ![TrestHost Logo](https://media.discordapp.net/attachments/1016532713173426297/1137629737334870038/tresthost.png?width=112&height=112)                      | [**TrestHost**](https://dash.tresthost.me/register?ref=majonez.exe) | **TrestHost is a good and powerful hosting provider** providing servers from the **USA and Germany**. Try us out today!                                             |
-| ![Terohost Logo](https://media.discordapp.net/attachments/905722570286960650/1139902959308783677/943e2f13a56ed86da3bfd4ffcbd5094e.png?width=112&height=112) | [Terohost](https://my.terohost.com/aff.php?aff=17)                  | **TeroHost is a Discord Bot hosting** provider that helps take care of all your needs regarding your Discord Bot to ensure your bot perfect uptime, ping and speed. |
+| ![TrestHost Logo](https://majoexe.xyz/assets/sponsors/tresthost.png)                      | [**TrestHost**](https://dash.tresthost.me/register?ref=majonez.exe) | **TrestHost is a good and powerful hosting provider** providing servers from the **USA and Germany**. Try us out today!                                             |
+
+
+## ⛔ Hosting Agreement
+
+**By hosting the project, you agree to the following terms:**
+
+1. 📜 **Attribution:**
+
+   - **You are not allowed to claim authorship** or affiliation with the Majo.exe team.
+   - **Proper credit must be given** to the original author when hosting the project.
+   - **You are not allowed to use the Majo.exe name or logo** in any way that implies affiliation with the Majo.exe team.
+
+2. 💻 **Hosting Rights:**
+
+   - The bot can be hosted on your server, **provided the terms outlined here are respected**.
+
+3. 🚧 **Modifications:**
+
+   - The footer in the Dashboard, such as "Powered by Majo.exe," **must not be modified or removed**.
+   - The `/about` command **must not be modified or removed**. This command contains information about the project and its authors.
+   - The project's source code **must not be modified in any way that would remove or alter the original attribution**.
+   - **The license must be included with any public distribution** of the project or its modified source code.
+
+4. 📦 **Distribution:**
+
+   - **You may not distribute the bot or its modified versions without adhering to the terms** mentioned in this agreement.
+   - **Any public release or distribution must include clear attribution** to the original author and a link to the original repository or source.
+
+5. ⚖️ **Compliance:**
+   - Failure to comply with these terms may result in a violation of the agreement.
+   - **Legal action may be taken** if these terms are not respected.
 
 ## ⁉️ Issues
 

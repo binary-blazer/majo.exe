@@ -1,10 +1,10 @@
 /* eslint-disable complexity */
 
-import { enableAutoModRule, createAutoModRule, syncAutoModRule } from "@majoexe/util/database";
+import { createAutoModRule, syncAutoModRule } from "@majoexe/util/database";
 import { ChannelType, AutoModerationRuleEventType, AutoModerationActionType, AutoModerationRuleTriggerType, EmbedBuilder, PermissionsBitField, codeBlock } from "discord.js";
 
 export async function enableAntiInvite(client, interaction, guildSettings) {
- const createdRule = await syncAutoModRule(interaction, "anti-invite");
+ const createdRule = await syncAutoModRule(interaction.guild.id, "anti-invite");
 
  const exemptRoles = interaction.options.getRole("exempt-roles");
  const exemptChannels = interaction.options.getChannel("exempt-channels");
@@ -18,11 +18,9 @@ export async function enableAntiInvite(client, interaction, guildSettings) {
  if (createdRule) {
   if (createdRule.enabled) return client.errorMessages.createSlashError(interaction, "❌ The anti-invite system is already `enabled`");
 
-  await interaction.guild.autoModerationRules.edit(createdRule.ruleId, {
+  await interaction.guild.autoModerationRules.edit(createdRule.id, {
    enabled: true,
   });
-
-  await enableAutoModRule(interaction.guild.id, createdRule.ruleId);
 
   const embed = new EmbedBuilder()
    .setColor(guildSettings?.embedColor || client.config.defaultColor)
@@ -31,7 +29,7 @@ export async function enableAntiInvite(client, interaction, guildSettings) {
    .setDescription("The anti-invite system has been `enabled`. All Discord invites will now be blocked.")
    .setFooter({
     text: `Requested by ${interaction.member.user.globalName || interaction.member.user.username}`,
-    iconURL: interaction.user.displayAvatarURL({
+    iconURL: interaction.member.user.displayAvatarURL({
      size: 256,
     }),
    })
@@ -154,7 +152,7 @@ export async function enableAntiInvite(client, interaction, guildSettings) {
    ])
    .setFooter({
     text: `Requested by ${interaction.member.user.globalName || interaction.member.user.username}`,
-    iconURL: interaction.user.displayAvatarURL({
+    iconURL: interaction.member.user.displayAvatarURL({
      size: 256,
     }),
    })

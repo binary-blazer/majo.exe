@@ -1,18 +1,16 @@
-import { disableAutoModRule, syncAutoModRule } from "@majoexe/util/database";
+import { syncAutoModRule } from "@majoexe/util/database";
 import { EmbedBuilder } from "discord.js";
 
 export async function disableAntiInvite(client, interaction, guildSettings) {
- const createdRule = await syncAutoModRule(interaction, "anti-invite");
+ const createdRule = await syncAutoModRule(interaction.guild.id, "anti-invite");
 
- if (!createdRule || (createdRule && !createdRule.enabled)) {
+ if (!createdRule) {
   return client.errorMessages.createSlashError(interaction, "❌ The anti-invite system is already `disabled`");
  }
 
- await interaction.guild.autoModerationRules.edit(createdRule.ruleId, {
+ await interaction.guild.autoModerationRules.edit(createdRule.id, {
   enabled: false,
  });
-
- await disableAutoModRule(interaction.guild.id, createdRule.ruleId);
 
  const embed = new EmbedBuilder()
   .setColor(guildSettings?.embedColor || client.config.defaultColor)
@@ -21,7 +19,7 @@ export async function disableAntiInvite(client, interaction, guildSettings) {
   .setDescription("The anti-invite system has been `disabled`. All Discord invites will no longer be blocked.")
   .setFooter({
    text: `Requested by ${interaction.member.user.globalName || interaction.member.user.username}`,
-   iconURL: interaction.user.displayAvatarURL({
+   iconURL: interaction.member.user.displayAvatarURL({
     size: 256,
    }),
   })

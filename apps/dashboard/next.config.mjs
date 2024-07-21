@@ -13,8 +13,8 @@ const nextConfig = {
  pageExtensions: ["mdx", "jsx", "js"],
  poweredByHeader: false,
  trailingSlash: false,
-
  images: {
+  unoptimized: true,
   remotePatterns: [
    {
     protocol: "https",
@@ -47,12 +47,4 @@ const nextConfig = {
  },
 };
 
-const createConfig = () => {
- const plugins = [withMDX, withBundle];
- const config = plugins.reduce((acc, next) => next(acc), {
-  ...nextConfig,
- });
- return config;
-};
-
-export default createConfig;
+export default withMDX(withBundle(nextConfig));

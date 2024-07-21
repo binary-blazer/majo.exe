@@ -1,5 +1,7 @@
+/* eslint-disable complexity */
+
 import prismaClient from "@majoexe/database";
-import { getServer, getGuildMember } from "@majoexe/util/functions";
+import { getServer, getGuildMember } from "@majoexe/util/functions/guild";
 import { getSession } from "lib/session";
 import { NextResponse } from "next/server";
 
@@ -17,7 +19,9 @@ export async function GET(request, { params }) {
     {
      status: 401,
      headers: {
-      "server-timing": `response;dur=${Date.now() - start}`,
+      ...(process.env.NODE_ENV !== "production" && {
+       "Server-Timing": `response;dur=${Date.now() - start}ms`,
+      }),
      },
     }
    );
@@ -32,7 +36,9 @@ export async function GET(request, { params }) {
     {
      status: 400,
      headers: {
-      "server-timing": `response;dur=${Date.now() - start}`,
+      ...(process.env.NODE_ENV !== "production" && {
+       "Server-Timing": `response;dur=${Date.now() - start}ms`,
+      }),
      },
     }
    );
@@ -49,7 +55,9 @@ export async function GET(request, { params }) {
     {
      status: 404,
      headers: {
-      "server-timing": `response;dur=${Date.now() - start}`,
+      ...(process.env.NODE_ENV !== "production" && {
+       "Server-Timing": `response;dur=${Date.now() - start}ms`,
+      }),
      },
     }
    );
@@ -64,7 +72,9 @@ export async function GET(request, { params }) {
     {
      status: 404,
      headers: {
-      "server-timing": `response;dur=${Date.now() - start}`,
+      ...(process.env.NODE_ENV !== "production" && {
+       "Server-Timing": `response;dur=${Date.now() - start}ms`,
+      }),
      },
     }
    );
@@ -81,7 +91,9 @@ export async function GET(request, { params }) {
     {
      status: 401,
      headers: {
-      "server-timing": `response;dur=${Date.now() - start}`,
+      ...(process.env.NODE_ENV !== "production" && {
+       "Server-Timing": `response;dur=${Date.now() - start}ms`,
+      }),
      },
     }
    );
@@ -98,13 +110,9 @@ export async function GET(request, { params }) {
     enableXPLastChanged: true,
     enableXPLevelUpMessage: true,
     enableXPLevelUpMessageLastChanged: true,
-    enableWarningAutomation: true,
-    enableWarningAutomationLastChanged: true,
     embedColor: true,
-    embedLastChanged: true,
     lastUpdated: true,
     publicPage: true,
-    publicPageLastChanged: true,
     vanity: true,
     guildLogs: {
      select: {
@@ -169,7 +177,6 @@ export async function GET(request, { params }) {
      select: {
       ruleId: true,
       ruleType: true,
-      enabled: true,
       createdAt: true,
      },
     },
@@ -193,7 +200,9 @@ export async function GET(request, { params }) {
     {
      status: 404,
      headers: {
-      "server-timing": `response;dur=${Date.now() - start}`,
+      ...(process.env.NODE_ENV !== "production" && {
+       "Server-Timing": `response;dur=${Date.now() - start}ms`,
+      }),
      },
     }
    );
@@ -209,7 +218,9 @@ export async function GET(request, { params }) {
    headers: {
     "Content-Type": "application/json",
     "Content-Disposition": `attachment; filename="server-${server.id}.json"`,
-    "server-timing": `response;dur=${Date.now() - start}`,
+    ...(process.env.NODE_ENV !== "production" && {
+     "Server-Timing": `response;dur=${Date.now() - start}ms`,
+    }),
    },
   });
  } catch (err) {
